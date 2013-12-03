@@ -1,0 +1,24 @@
+== ABOUT ==
+
+This extension allows your users to login using their email in addition
+to account name.
+
+* Author: Vitaliy Filippov, 2013
+* License: GPLv3 or later
+* Homepage: http://wiki.4intra.net/LoginByEmail
+
+== USAGE ==
+
+Just install. The extension will modify the standard MediaWiki login form
+allowing to use email in the "username:" field.
+
+== INSTALLATION ==
+
+* Apply the patch to MediaWiki code:
+  cd <YOUR_WIKI_DIRECTORY>
+  patch -p1 < extensions/LoginByEmail/LoginByEmail.diff
+* Include extension into your LocalSettings.php - add the line:
+  require_once("$IP/extensions/LoginByEmail/LoginByEmail.php");
+* Optionally you can allow "wrong password" errors for email login with:
+*: <tt>$wgLoginByEmailDiscloseExistence = true;</tt>
+*: Please note it's a less secure behaviour because it allows to check if an arbitrary email is registered in your wiki.
