@@ -38,6 +38,7 @@ $wgExtensionCredits['other'][] = array(
 $wgExtensionMessagesFiles[] = __DIR__.'/LoginByEmail.i18n.php';
 $wgHooks['LoginGetUser'][] = 'LoginByEmail_GetUser';
 $wgHooks['UserLoginForm'][] = 'LoginByEmail_Form';
+$wgAutoloadClasses['LoginByEmail_UserloginTemplate'] = __DIR__.'/LoginByEmail.class.php';
 
 function LoginByEmail_GetUser($username, $password, &$user)
 {
@@ -63,20 +64,13 @@ function LoginByEmail_GetUser($username, $password, &$user)
     return true;
 }
 
-class LoginByEmail_TranslatorHack extends MediaWiki_I18N
-{
-    function translate($value)
-    {
-        if ($value == 'yourname')
-        {
-            $value = 'loginbyemail-yourname';
-        }
-        return parent::translate($value);
-    }
-}
-
 function LoginByEmail_Form(&$template)
 {
-    $template->setTranslator(new LoginByEmail_TranslatorHack());
+    $new = new LoginByEmail_UserloginTemplate();
+    foreach ($template as $k => $v)
+    {
+        $new->$k = $template->$k;
+    }
+    $template = $new;
     return true;
 }
