@@ -1,0 +1,17 @@
+diff --git a/includes/specials/SpecialUserlogin.php b/includes/specials/SpecialUserlogin.php
+index fd2aacc..34444d9 100644
+--- a/includes/specials/SpecialUserlogin.php
++++ b/includes/specials/SpecialUserlogin.php
+@@ -747,7 +747,11 @@ class LoginForm extends SpecialPage {
+ 			return self::SUCCESS;
+ 		}
+ 
+-		$u = User::newFromName( $this->mUsername );
++		$u = null;
++		wfRunHooks( 'LoginGetUser', array( $this->mUsername, $this->mPassword, &$u ) );
++		if ( !$u ) {
++			$u = User::newFromName( $this->mUsername );
++		}
+ 		if ( $u === false ) {
+ 			return self::ILLEGAL;
+ 		}
