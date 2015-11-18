@@ -38,7 +38,6 @@ $wgExtensionCredits['other'][] = array(
 $wgExtensionMessagesFiles[] = __DIR__.'/LoginByEmail.i18n.php';
 $wgHooks['LoginGetUser'][] = 'LoginByEmail_GetUser';
 $wgHooks['UserLoginForm'][] = 'LoginByEmail_Form';
-$wgAutoloadClasses['LoginByEmail_UserloginTemplate'] = __DIR__.'/LoginByEmail.class.php';
 
 function LoginByEmail_GetUser($username, $password, &$user)
 {
@@ -66,6 +65,18 @@ function LoginByEmail_GetUser($username, $password, &$user)
 
 function LoginByEmail_Form(&$template)
 {
+    eval('
+class LoginByEmail_UserloginTemplate extends '.get_class($template).'
+{
+    function msg($value)
+    {
+        if ($value == "yourname" || $value == "userlogin-yourname")
+            echo wfMessage("loginbyemail-yourname")->parse();
+        else
+            parent::msg($value);
+    }
+}
+');
     $new = new LoginByEmail_UserloginTemplate();
     foreach ($template as $k => $v)
     {
